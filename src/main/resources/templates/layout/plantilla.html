@@ -22,6 +22,8 @@
                             <li class="nav-item px-2"><a class="nav-link" th:href="@{/profesionista/listado}">[[#{plantilla.profesionistas}]]</a></li>
                         </ul>
                         <ul class="navbar-nav">
+                        <li><i class="fa-solid fa-gear" th:href="@{/categoria/listado}"></i></li>
+  <!-- 22, 25 revisar icono de menu-->     
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Lang</a>
                                 <ul class="dropdown-menu dropdown-menu-dark">
@@ -33,16 +35,6 @@
                     </div>
                 </div>
             </nav>
-            <section id="main-header" class="py-1 bg-info text-white">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <h2><i class="fa-solid fa-person-digging"></i> [[#{app.eslogan}]]</h2>
-                            
-                        </div>
-                    </div>
-                </div>
-            </section>
         </header>
         
         
