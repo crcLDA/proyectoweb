@@ -3,7 +3,38 @@
     <head th:replace="layout/plantilla :: head"/>
     <body>
         <header th:replace="layout/plantilla :: header"/>
-        
+
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">   
+
+                    <img src="images/inicio.png" id="imgIndex" alt="" class="img-fluid"/>
+                </div>
+                <div class="col-md-1"></div> 
+                <div class="col-md-4">
+                    <form th:action="@{/login/iniciar}" th:object="${usuario}"
+                          method="POST" class="was-validated" enctype="multipart/form-data">
+                        <div class="modal-body">
+                            <label for="cedCliente"></label><input type="hidden" class="form-control" name="cedCliente" value=""/>
+
+                            <div class="mb-3">
+                                <label for="usuario">[[#{login.username}]]</label>
+                                <input type="text" class="form-control" name="usuario" required="true"/>
+                            </div>
+                            <div class="mb-3">
+                                <label for="password">[[#{login.password}]]</label>
+                                <input type="password" class="form-control" name="password" required="true"/> 
+                            </div>
+                        </div>
+                        <button class="btn btn-primary" type="submit">[[#{login.login}]]</button>
+                    </form>
+                    <br>
+                    <br>
+                    <button class="btn btn-secondary" type="submit" >[[#{login.new}]]</button>
+                </div>
+            </div>
+        </div>
+
         <footer th:replace="layout/plantilla :: footer"/>
     </body>
 </html>

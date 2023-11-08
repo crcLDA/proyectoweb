@@ -1,7 +1,5 @@
 package com.proyectoweb.domain;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.io.Serializable;
@@ -14,11 +12,8 @@ public class Cliente implements Serializable{
     private static final long serialVersionUID = 1L;
     
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long cedula;
-    
-    private String username;
-    private String password;
+
     private String nombre;
     private String apellidos;
     private String correo;
@@ -32,10 +27,8 @@ public class Cliente implements Serializable{
 
     public Cliente() {}
 
-    public Cliente(Long cedula, String username, String password, String nombre, String apellidos, String correo, String telefono, int annoNacimiento, int mesNacimiento, int diaNacimiento, String rutaImagen, boolean esAdmin, boolean activo) {
+    public Cliente(Long cedula, String nombre, String apellidos, String correo, String telefono, int annoNacimiento, int mesNacimiento, int diaNacimiento, String rutaImagen, boolean esAdmin, boolean activo) {
         this.cedula = cedula;
-        this.username = username;
-        this.password = password;
         this.nombre = nombre;
         this.apellidos = apellidos;
         this.correo = correo;
