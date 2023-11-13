@@ -11,4 +11,6 @@ public interface UsuarioService {
     public void save(Usuario usuario);
     
     public void delete(Usuario usuario);
+    
+    public Long validar(String usuario, String clave);
 }

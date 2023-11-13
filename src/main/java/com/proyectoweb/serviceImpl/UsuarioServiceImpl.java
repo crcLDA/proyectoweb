@@ -37,5 +37,13 @@ public class UsuarioServiceImpl  implements UsuarioService{
     public void delete(Usuario usuario) {
         usuarioDao.delete(usuario);
     }
+
+    @Override
+    public Long validar(String usuario, String clave) {
+        Usuario us = usuarioDao.verificarLogin(usuario, clave);
+        if (us!=null){
+            return us.getCedCliente();      
+        }else return Long.parseLong("0");
+    }
     
 }
