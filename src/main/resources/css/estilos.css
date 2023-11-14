@@ -1,0 +1,134 @@
+:root{
+  --blanco:#fff;
+  --fuente:'Quicksand', sans-serif;
+}
+html{
+  box-sizing: border-box;
+}
+
+*,*::after, *::before{
+  box-sizing: inherit;
+}
+
+body{
+  font-family: var(--fuente);
+  background-color: rgb(255, 255, 255);
+  display: flex;
+  align-items: center;
+  height: 100vh;/*centrado vertical del form*/
+}
+
+.contenedor{
+  margin: 0 auto;
+  max-width: 1200px;
+  width: 100%;
+}
+
+.imagen-formulario{
+  background-image: url('../img/.jpg');
+  background-position: center center;
+  background-size: cover;
+  height: 200px;
+  flex: 0 0 calc(60%);
+  position: relative;
+  
+}
+.imagen-formulario::before{
+ content: '';
+ position: absolute;
+ top: 0;
+ bottom: 0;
+ left: 0;
+ right: 0;
+ background: linear-gradient(to right,rgba(139, 78, 141, 0.502), rgba(25, 109, 158, 0.5) );
+ 
+}
+
+@media(min-width:768px){
+  .imagen-formulario{
+      height: auto;
+      background-position: right;
+  }
+
+}
+@media(min-width:1200px){
+  .imagen-formulario{
+      background-position: center;
+  }
+}
+
+@media(min-width:768px){
+  .contenedor-formulario{
+      display: flex;
+  }
+}
+
+.formulario{
+  padding: 50px;
+  background-color: var(--azul);
+}
+.texto-formulario h2, .input label, .password-olvidada a, .texto-formulario p{
+  color: rgb(0, 0, 0);
+}
+.texto-formulario h2{
+  font-size: 40px;
+  text-align: center;
+}
+.texto-formulario p{
+  font-size: 22px;
+  text-align: center;
+}
+.input label{
+  display: block;
+  font-size: 20px;
+  font-weight: lighter;
+  margin: 10px;
+}
+.password-olvidada a{
+  display: inline-block;
+  margin-bottom: 20px;
+  font-size: 16px;
+}
+
+.input input{
+  width: 100%;
+  padding: 10px 16px;
+  border-radius: 35px;
+  outline: none;
+  margin-bottom: 15px;
+  border: 1px solid rgb(70, 70, 70);
+}
+
+/* Boton morado */
+
+.input input[id="login"]{
+  background-color: #5F56D6;
+  color: var(--blanco);
+  font-size: 20px;
+  font-weight: bold;
+  border: none;
+  margin-top: 10px;
+  transition: background-color .4s ease-in-out;
+}
+
+.input input[id="login"]:hover{ /*hover cursor en login*/
+  cursor: pointer; 
+  background-color: #28245a;
+}
+
+/* Boton verde */
+
+.input input[id="crearCuenta"]{
+  background-color: #65CF79;
+  color: var(--blanco);
+  font-size: 20px;
+  font-weight: bold;
+  border: none;
+  margin-top: 10px;
+  transition: background-color .4s ease-in-out;
+}
+
+.input input[id="crearCuenta"]:hover{ /*hover cursor en login*/
+  cursor: pointer; 
+  background-color: #1c7c3b;
+}
