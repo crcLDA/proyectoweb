@@ -24,7 +24,7 @@ public class ReporteServiceImpl implements ReporteService{
 
     @Override
     public Reporte getReporte(Reporte reporte) {
-        return reporteDao.findById(reporte.getId()).orElse(null);
+        return reporteDao.findById(reporte.getIdReporte()).orElse(null);
     }
     
     @Override

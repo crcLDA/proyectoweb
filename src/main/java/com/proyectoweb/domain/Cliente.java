@@ -1,6 +1,9 @@
 package com.proyectoweb.domain;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.io.Serializable;
 import lombok.Data;
@@ -22,12 +25,15 @@ public class Cliente implements Serializable{
     private int mesNacimiento;
     private int diaNacimiento;
     private String rutaImagen;
-    private boolean esAdmin;
     private boolean activo;
+    
+    @OneToOne
+    @JoinColumn(name="cedula", insertable=false, updatable=false)
+    private Profesionista profesionista;
 
     public Cliente() {}
 
-    public Cliente(Long cedula, String nombre, String apellidos, String correo, String telefono, int annoNacimiento, int mesNacimiento, int diaNacimiento, String rutaImagen, boolean esAdmin, boolean activo) {
+    public Cliente(Long cedula, String nombre, String apellidos, String correo, String telefono, int annoNacimiento, int mesNacimiento, int diaNacimiento, String rutaImagen, boolean activo) {
         this.cedula = cedula;
         this.nombre = nombre;
         this.apellidos = apellidos;
@@ -37,7 +43,6 @@ public class Cliente implements Serializable{
         this.mesNacimiento = mesNacimiento;
         this.diaNacimiento = diaNacimiento;
         this.rutaImagen = rutaImagen;
-        this.esAdmin = esAdmin;
         this.activo = activo;
     }
     

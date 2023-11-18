@@ -1,9 +1,13 @@
 package com.proyectoweb.domain;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.io.Serializable;
 import lombok.Data;
@@ -16,7 +20,8 @@ public class Profesionista implements Serializable{
     
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private Long id;
+    @Column(name="id_profesionista")
+    private Long idProfesionista;
     
     private String cedula;
     private String ocupacion;
@@ -24,22 +29,32 @@ public class Profesionista implements Serializable{
     private String telefono;
     private String instagram;
     private String descripcion;
-    private int idCategoria;
+    //private int idCategoria;
     private boolean activo;
+    
+    @OneToOne
+    @JoinColumn(name="cedula", insertable=false, updatable=false)
+    private Cliente cliente;
+    
+    @ManyToOne
+    @JoinColumn(name="id_categoria")//este es de esta tabla
+    private Categoria categoria;
 
     public Profesionista() {}
 
-    public Profesionista(Long id, String cedula, String ocupacion, String correo, String telefono, String instagram, String descripcion, int idCategoria, boolean activo) {
-        this.id = id;
+    public Profesionista(String cedula, String ocupacion, String correo, String telefono, String instagram, String descripcion, boolean activo, Cliente cliente, Categoria categoria) {
         this.cedula = cedula;
         this.ocupacion = ocupacion;
         this.correo = correo;
         this.telefono = telefono;
         this.instagram = instagram;
         this.descripcion = descripcion;
-        this.idCategoria = idCategoria;
         this.activo = activo;
+        this.cliente = cliente;
+        this.categoria = categoria;
     }
+
+    
     
     
     

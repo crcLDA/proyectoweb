@@ -11,4 +11,6 @@ public interface ProfesionistaService {
     public void save(Profesionista profesionista);
     
     public void delete(Profesionista profesionista);
+    
+    public Profesionista findByCedula(String cedula);
 }

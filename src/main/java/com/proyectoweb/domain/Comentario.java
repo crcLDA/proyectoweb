@@ -15,7 +15,7 @@ public class Comentario  implements Serializable{
     
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private Long id;
+    private Long idComentario;
     
     private String idProfesionista;
     private String opinion;
@@ -24,8 +24,7 @@ public class Comentario  implements Serializable{
 
     
     
-    public Comentario(Long id, String idProfesionista, String opinion) {
-        this.id = id;
+    public Comentario(String idProfesionista, String opinion) {
         this.idProfesionista = idProfesionista;
         this.opinion = opinion;
     }

@@ -28,7 +28,7 @@ public class CategoriaServiceImpl implements CategoriaService{
 
     @Override
     public Categoria getCategoria(Categoria categoria) {
-        return categoriaDao.findById(categoria.getId()).orElse(null);
+        return categoriaDao.findById(categoria.getIdCategoria()).orElse(null);
     }
     
     @Override

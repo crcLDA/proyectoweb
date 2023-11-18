@@ -22,7 +22,7 @@ public class ComentarioServiceImpl implements ComentarioService{
 
     @Override
     public Comentario getComentario(Comentario comentario) {
-        return comentarioDao.findById(comentario.getId()).orElse(null);
+        return comentarioDao.findById(comentario.getIdComentario()).orElse(null);
     }
     
     @Override

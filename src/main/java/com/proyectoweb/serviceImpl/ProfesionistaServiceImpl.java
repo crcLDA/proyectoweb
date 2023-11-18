@@ -27,7 +27,7 @@ public class ProfesionistaServiceImpl implements ProfesionistaService{
 
     @Override
     public Profesionista getProfesionista(Profesionista profesionista) {
-        return profesionistaDao.findById(profesionista.getId()).orElse(null);
+        return profesionistaDao.findById(profesionista.getIdProfesionista()).orElse(null);
     }
     
     @Override
@@ -40,5 +40,10 @@ public class ProfesionistaServiceImpl implements ProfesionistaService{
     @Transactional
     public void delete(Profesionista profesionista) {
         profesionistaDao.delete(profesionista);
+    }
+    
+    @Override
+    public Profesionista findByCedula(String cedula){
+        return profesionistaDao.findByCedula(cedula);
     }
 }
