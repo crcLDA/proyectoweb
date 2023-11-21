@@ -12,12 +12,13 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Service
-public class UsuarioServiceImpl  implements UsuarioService{
+@Service("UserDetailsService")
+public class UsuarioServiceImpl  implements UsuarioService, UserDetailsService{
     @Autowired
     private UsuarioDao usuarioDao;
     
@@ -57,6 +58,8 @@ public class UsuarioServiceImpl  implements UsuarioService{
         }else return Long.parseLong("0");
     }
     
+    @Override
+    @Transactional(readOnly=true)
      public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         //busca el usuario en la BD
         Usuario usuario = usuarioDao.findByUsername(username);
@@ -67,7 +70,8 @@ public class UsuarioServiceImpl  implements UsuarioService{
         //se encontro usuario en BD y se remueve el atributo en la sesion
         /*session.removeAttribute("usuarioImagen");
         session.setAttribute("usuarioImagen", usuario.getRutaImagen());*/
-        session.setAttribute("Usuario", usuario.getUsername());
+        //session.removeAttribute("cedula");
+        session.setAttribute("cedula", usuario.getCedula());
         var roles = new ArrayList<GrantedAuthority>();
         
         //se transforma los roles a granted authority

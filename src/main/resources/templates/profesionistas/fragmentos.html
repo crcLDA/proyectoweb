@@ -16,12 +16,11 @@
                             <div class="card-body">
                                 <h3>[[#{app.perfil}]]</h3>
                                 <br>
-                                <h4 class="fs-2"><i class="fas fa-users"></i> [[${totalProfesionistas}]]</h4>
-                                <br>
-                                <a>JOSE MANIA</a>
+                                <img th:src="${#ctx.session.cliente.rutaImagen}" height="150"/>
                                 <br><br>
-                                <!--***********************usuario session*************************-->    
-                                <a th:href="@{/profesionistas/modificar/}"
+                                <h5>[[${#ctx.session.cliente.nombre}]] [[${#ctx.session.cliente.apellidos}]]</h5>
+                                <br><br>
+                                <a th:href="@{/cliente/modificarPerfil/}+${#ctx.session.cliente.cedula}"
                                     class="btn" style="background-color:silver;">
                                     <i class="fa-regular fa-user"></i> [[#{app.verPerfil}]]
                                 </a>
@@ -54,7 +53,7 @@
                                             <td><img id="blah" th:src="@{${profesionista.cliente.rutaImagen}}" alt="foto" height="80"/></td>
                                             <td>[[${profesionista.cliente.nombre}]] [[${profesionista.cliente.apellidos}]]</td>
                                             <td>[[${profesionista.ocupacion}]]</td>
-                                            <td><a th:href="@{/profesionista/verPerfil/}+${profesionista.cedula}"
+                                            <td><a th:href="@{/profesionista/verPerfil/}+${profesionista.idProfesionista}"
                                                    class="btn btn-success">
                                                     <i class="fa-regular fa-eye"></i> [[#{accion.perfil}]]</a></td></tr>
                                     </tbody>
@@ -68,6 +67,38 @@
                 </div>
             </div>
         </section>
+        
+        <section th:fragment="listadoComentarios" id="comentarios">
+            <br><br><br>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div th:if="${comentarios != null and !comentarios.empty}"> 
+                                <table class="table table-striped table-hover">
+                                    <thead class="table" style="background-color:mediumspringgreen;">
+                                        <tr><th>[[#{app.comentarios}]]</th></tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr th:each="comentario : ${comentarios}">
+                                            <div>
+                                                <td>
+                                                    [[${comentario.opinion}]]
+                                                </td>
+                                            </div>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="text-center p-2" th:if="${comentarios == null or comentarios.empty}">
+                                <span>[[#{lista.comentario}]]</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
         
         <!-- 4 Fragmento que se utiliza en la página perfil.html -->
         <section th:fragment="verProfesionista">
@@ -96,36 +127,30 @@
             <div class="row">
                 <div class="col-md-2"></div>
                 <div class="col-md-8">
-                    <form method="POST"
-                          th:action="@{/profesionista/listado}" 
-                          th:object="${profesionista}"
-                          class="was-validated"                          
-                          enctype="multipart/form-data">
-                        <input type="hidden" name="cedula" th:field="*{cedula}"/>
-                        <div id=details>
-                            <div class="container">
-                                <div class="row">
-                                    <div class="col">
-                                        <div class="card">
-                                            <div class="card-header">
-                                                <h4>[[#{usuario.perfil}]]</h4>
-                                            </div>
-                                            <div class="card-body">
-                                                <div class="mb-3">
-                                                    <textarea class="form-control" name="descripcion" th:field="*{descripcion}" 
-                                                      rows="10" cols="500" readonly>[[#{profesionista.descripcion}]]</textarea>
-                                                </div>
+                    <div id=details>
+                        <div class="container">
+                            <div class="row">
+                                <div class="col">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h4>[[#{usuario.perfil}]]</h4>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="mb-3">
+                                                <textarea class="form-control" name="descripcion" 
+                                                rows="10" cols="500" readonly>[[${profesionista.descripcion}]]</textarea>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                    </form>
+                           </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
         
-        <!-- 4 Fragmento que se utiliza en la página perfil.html cambiar todo dentro del form-->
+        <!-- 4 Fragmento que se utiliza en la página modificar.html cambiar todo dentro del form-->
         <section th:fragment="modificarProfesionista">
             <br>
             
@@ -163,8 +188,6 @@
                         </div>
                         
                         <input type="hidden" name="idProfesionista" th:field="*{idProfesionista}"/>
-                        <input type="hidden" name="cedula" th:field="*{cedula}"/>
-<!--                        <input type="hidden" name="activo" th:field="*{activo}"/>-->
                         <div id=details>
                             <div class="container">
                                 <div class="row">
@@ -213,6 +236,32 @@
                 </div>
             </div>
         </section>
-                        
+        
+        <section th:fragment="filtros" class="bg-light">
+            <div class="row py-2">
+                <div class="col-md-1"></div>
+                <div class="col-md-3">
+                    <form method="POST" th:action="@{/profesionista/buscarOcupacion}" 
+                          class="was-validated">
+                        <div class="card success">
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <label for="filtroOcupacion">[[#{profesionista.buscarOcupacion}]]</label>
+                                    <input type="text" class="form-control" 
+                                           th:value="${filtroOcupacion}"
+                                           th:name="filtroOcupacion"/>
+                                </div>
+                            </div>
+                            <div class="card-footer text-center">
+                                <button type="submit" class="btn btn-warning">
+                                    <i class="fas fa-check"></i> [[#{pruebas.nativo}]]
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+        
     </body>
 </html>

@@ -1,4 +1,6 @@
-<html xmlns="http://www.w3.org/1999/chtml" xmlns:th="http://thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/chtml" 
+      xmlns:th="http://thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
     <head th:fragment="head">
         <title>Empleate</title>
         <meta charset="UTF-8">
@@ -24,13 +26,29 @@
                         <ul class="navbar-nav">
                         <!--<li><i class="fa-solid fa-gear" th:href="@{/categoria/listado}"></i></li>-->
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Lang</a>
+                                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false"><i class="fa-solid fa-gear"></i></a>
                                 <ul class="dropdown-menu dropdown-menu-dark">
-                                    <li><a class="dropdown-item"  th:href="@{/(lang=es)}">ES</a></li>
-                                    <li><a class="dropdown-item" th:href="@{/(lang=en)}">EN</a></li>
+                                    <li><a class="dropdown-item"  th:href="@{/profesionista/listado}">Modo cliente</a></li>
+                                    <li><a class="dropdown-item" th:href="@{/profesionista/modificarPerfil/}+${#ctx.session.cliente.cedula}">Modo promocional</a></li>
+                                    
                                 </ul>
                             </li>
-                        </ul>                        
+                        </ul> 
+                        <ul class="navbar-nav" sec:authorize="isAuthenticated()"> 
+                            <li class="nav-item text-white my-auto">
+                                <i class="fa fa-user mx-1"></i><span sec:authentication="name"></span>
+                            </li>
+                            <li class="nav-item text-white my-auto">
+                                <i class="fa fa-users mx-2"></i><span sec:authentication="principal.authorities">Roles</span>
+                            </li>
+                            <li class="nav-item text-white my-auto">
+                                <form method="POST" th:action="@{/logout}">
+                                    <button class="btn btn-dark mx-2">
+                                        <i class="fa fa-sign-out-alt"></i>
+                                    </button>
+                                </form>
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </nav>

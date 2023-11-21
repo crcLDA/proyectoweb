@@ -7,30 +7,36 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.io.Serializable;
 import java.util.List;
+import javax.validation.constraints.NotEmpty;
 import lombok.Data;
 
 @Data
 @Entity
 @Table(name="usuario")
 public class Usuario  implements Serializable{
+    private static final long serialVersionUID = 1L;
+    
     @Id
     private String username;
     
+    @NotEmpty
     private String password;
+    
+    @NotEmpty
     private Long cedula;
     
     @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "username")
     private List<Rol> roles;
 
-    public Usuario() {}
+    /*public Usuario() {}
 
     public Usuario(String username, String password, Long cedula, List<Rol> roles) {
         this.username = username;
         this.password = password;
         this.cedula = cedula;
         this.roles = roles;
-    }
+    }*/
 
     
 }

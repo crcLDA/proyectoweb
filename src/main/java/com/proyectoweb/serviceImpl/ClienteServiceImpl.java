@@ -26,8 +26,8 @@ public class ClienteServiceImpl implements ClienteService{
     }
 
     @Override
-    public Cliente getCliente(Cliente cliente) {
-        return clienteDao.findById(cliente.getCedula()).orElse(null);
+    public Cliente getCliente(Long cedula) {
+        return clienteDao.findById(cedula).orElse(null);
     }
     
     @Override

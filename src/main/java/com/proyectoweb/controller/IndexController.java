@@ -22,7 +22,7 @@ public class IndexController {
     }
     
     
-    @RequestMapping("/login")
+    /*@RequestMapping("/login")
     public String login(@RequestParam(value = "usuario") String usuario,
             @RequestParam(value = "clave") String clave, Model model) {
         Long ced = usuarioService.validar(usuario, clave);
@@ -30,6 +30,6 @@ public class IndexController {
         if (ced>0) return "/profesionistas/listado";
         else return "index";
         
-    }
+    }*/
     
 }

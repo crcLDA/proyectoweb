@@ -6,6 +6,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.io.Serializable;
+import java.util.Date;
 import lombok.Data;
 
 @Data
@@ -21,9 +22,7 @@ public class Cliente implements Serializable{
     private String apellidos;
     private String correo;
     private String telefono;
-    private int annoNacimiento;
-    private int mesNacimiento;
-    private int diaNacimiento;
+    private String fechaNacimiento;
     private String rutaImagen;
     private boolean activo;
     
@@ -33,18 +32,19 @@ public class Cliente implements Serializable{
 
     public Cliente() {}
 
-    public Cliente(Long cedula, String nombre, String apellidos, String correo, String telefono, int annoNacimiento, int mesNacimiento, int diaNacimiento, String rutaImagen, boolean activo) {
+    public Cliente(Long cedula, String nombre, String apellidos, String correo, String telefono, String fechaNacimiento, String rutaImagen, boolean activo, Profesionista profesionista) {
         this.cedula = cedula;
         this.nombre = nombre;
         this.apellidos = apellidos;
         this.correo = correo;
         this.telefono = telefono;
-        this.annoNacimiento = annoNacimiento;
-        this.mesNacimiento = mesNacimiento;
-        this.diaNacimiento = diaNacimiento;
+        this.fechaNacimiento = fechaNacimiento;
         this.rutaImagen = rutaImagen;
         this.activo = activo;
+        this.profesionista = profesionista;
     }
+
+    
     
     
 }

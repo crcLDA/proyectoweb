@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="~{layout/plantilla :: head}">
+        <title>Empleate</title>
+    </head>
+    <body>
+        <!-- 1 Fragmento que se utiliza en la página modificar.html cambiar todo dentro del form-->
+        <section th:fragment="modificarCliente">
+            <br>
+            <br><br>
+            <div class="row">
+                <div class="col-md-3"></div>
+                <div class="col-md-6">
+                    <form method="POST"
+                          th:action="@{/cliente/guardar}" 
+                          th:object="${cliente}"
+                          class="was-validated"                          
+                          enctype="multipart/form-data">
+                        <input type="hidden" name="cedula" th:field="*{cedula}"/>
+                        <input type="hidden" name="activo" th:field="*{activo}"/>
+                        <input type="hidden" name="rutaImagen" th:field="*{rutaImagen}"/>
+                        <div class="row" style="background-color:thistle;">
+                            <div class="col-md-1"></div>
+                            <div class="mb-3">
+                                <label for="imagen">[[#{categoria.rutaImagen}]]</label>
+                                <input class="form-control" type="file" name="imagenFile"
+                                   onchange="readURL(this);" />
+                                <img id="blah" th:src="@{${rutaImagen}}" alt="your image" height="200"/>
+                            </div>
+                            <div class="col-md-2">
+                                <br>
+                                Cédula: [[${cliente.cedula}]]
+                                <br>
+                            </div>
+                            <div class="col-md-4"></div>
+                            <div class="col-md-2">
+                            </div>
+                        </div>
+                        <div id=details>
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h5>[[#{usuario.perfil}]]</h5>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="mb-3">
+                                                    <label for="nombre">[[#{usuario.nombre}]]</label>
+                                                    <input type="text" class="form-control" th:field="*{nombre}" name="nombre" required="true"/>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="apellidos">[[#{usuario.apellidos}]]</label>
+                                                    <input type="text" class="form-control" th:field="*{apellidos}" name="apellidos" required="true"/>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="correo">[[#{usuario.correo}]]</label>
+                                                    <input type="text" class="form-control" name="correo" th:field="*{correo}">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="telefono">[[#{usuario.telefono}]]</label>
+                                                    <input type="text" class="form-control" name="telefono" th:field="*{telefono}">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="fechaNacimiento">[[#{usuario.diaNacimiento}]]</label>
+                                                    <input type="date" class="form-control" name="fechaNacimiento" th:field="*{fechaNacimiento}">
+                                                </div>
+                                                <div class="modal-footer align-middle">
+                                                    <button class="btn" style="background-color:LightSalmon;" type="submit">Guardar</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+        
+        
+        
+    </body>
+</html>

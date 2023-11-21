@@ -21,6 +21,7 @@ public class ComentarioServiceImpl implements ComentarioService{
     }
 
     @Override
+    @Transactional(readOnly=true)
     public Comentario getComentario(Comentario comentario) {
         return comentarioDao.findById(comentario.getIdComentario()).orElse(null);
     }
@@ -35,5 +36,11 @@ public class ComentarioServiceImpl implements ComentarioService{
     @Transactional
     public void delete(Comentario comentario) {
         comentarioDao.delete(comentario);
+    }
+    
+    @Override
+    @Transactional(readOnly=true)
+    public List<Comentario> findByIdProfesionista(Long idProfesionista){
+        return comentarioDao.findByIdProfesionista(idProfesionista);
     }
 }

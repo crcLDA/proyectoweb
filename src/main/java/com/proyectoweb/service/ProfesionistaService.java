@@ -6,11 +6,13 @@ import java.util.List;
 public interface ProfesionistaService {
     public List<Profesionista> getProfesionistas(boolean activos);
     
-    public Profesionista getProfesionista(Profesionista profesionista);
+    public Profesionista getProfesionista(Long idProfesionista);
     
     public void save(Profesionista profesionista);
     
     public void delete(Profesionista profesionista);
     
-    public Profesionista findByCedula(String cedula);
+    public Profesionista fingByCedula(Long cedula);
+    
+    public List<Profesionista> filtroOcupacion(String filtroOcupacion);
 }

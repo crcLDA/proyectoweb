@@ -6,8 +6,10 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ResourceBundleMessageSource;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -19,6 +21,7 @@ import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
 @Configuration
+@EnableWebSecurity
 public class ProjectConfig implements WebMvcConfigurer{
     
     @Autowired
@@ -60,8 +63,8 @@ public class ProjectConfig implements WebMvcConfigurer{
     
     @Override
     public void addViewControllers(ViewControllerRegistry registry){
-        registry.addViewController("/login").setViewName("login");
-        registry.addViewController("/").setViewName("index");
+        registry.addViewController("/login").setViewName("index");
+        //registry.addViewController("/").setViewName("/profesionista/listado");
         registry.addViewController("/registro/nuevo").setViewName("/registro/nuevo");
     }
     
@@ -70,8 +73,8 @@ public class ProjectConfig implements WebMvcConfigurer{
         http
                 .authorizeHttpRequests((request) -> request
                 .requestMatchers("/js/**","/webjars/**","/","/index","/errores/**","/error","/error/**",
-                        "/profesionistas/listado","/profesionistas/verPerfil/**","/reportes/**",
-                        "/registro/**")
+                        "/profesionistas/listado","/profesionistas/verPerfil/**","/reportes/**","/**",
+                        "/login","/registro/**")
                         .permitAll()
                 .requestMatchers(
                         ""
@@ -83,7 +86,7 @@ public class ProjectConfig implements WebMvcConfigurer{
                 .hasRole("USER")
                 )
                 .formLogin((form) -> form
-                .loginPage("/login").permitAll())
+                .loginPage("/index").permitAll())
                 .logout((logout) -> logout.permitAll());
         return http.build();
     }

@@ -26,8 +26,8 @@ public class ProfesionistaServiceImpl implements ProfesionistaService{
     }
 
     @Override
-    public Profesionista getProfesionista(Profesionista profesionista) {
-        return profesionistaDao.findById(profesionista.getIdProfesionista()).orElse(null);
+    public Profesionista getProfesionista(Long idProfesionista) {
+        return profesionistaDao.findById(idProfesionista).orElse(null);
     }
     
     @Override
@@ -43,7 +43,13 @@ public class ProfesionistaServiceImpl implements ProfesionistaService{
     }
     
     @Override
-    public Profesionista findByCedula(String cedula){
+    public Profesionista fingByCedula(Long cedula){
         return profesionistaDao.findByCedula(cedula);
     }
+    
+    @Override
+    public List<Profesionista> filtroOcupacion(String filtroOcupacion) {
+        System.out.println(filtroOcupacion);
+        return profesionistaDao.filtroOcupacion(filtroOcupacion);
+    } 
 }

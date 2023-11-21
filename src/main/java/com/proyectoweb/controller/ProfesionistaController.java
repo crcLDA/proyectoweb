@@ -1,10 +1,15 @@
 package com.proyectoweb.controller;
 
+import com.proyectoweb.dao.ClienteDao;
 import com.proyectoweb.domain.Categoria;
+import com.proyectoweb.domain.Cliente;
+import com.proyectoweb.domain.Comentario;
 import com.proyectoweb.domain.Profesionista;
 import com.proyectoweb.service.CategoriaService;
 import com.proyectoweb.service.ClienteService;
+import com.proyectoweb.service.ComentarioService;
 import com.proyectoweb.service.ProfesionistaService;
+import jakarta.servlet.http.HttpSession;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,6 +24,12 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/profesionista")
 @Controller
 public class ProfesionistaController {
+    /***************************************************************/
+    @Autowired
+    private ClienteDao clienteDao;
+    @Autowired
+    private HttpSession session;
+    /***************************************************************/
     
     @Autowired
     private ProfesionistaService profesionistaService;
@@ -26,26 +37,69 @@ public class ProfesionistaController {
     @Autowired
     private CategoriaService categoriaService;
     
+    @Autowired
+    private ClienteService clienteService;
+    
+    @Autowired
+    private ComentarioService comentarioService;
     
     @GetMapping("/listado")
     public String inicio(Model model) {
+        Cliente cliente = clienteDao.findById(Long.parseLong("123")).orElse(null);
+        session.setAttribute("cliente", cliente);
         List<Profesionista> listadoProfesionistas = profesionistaService.getProfesionistas(true);
         model.addAttribute("profesionistas", listadoProfesionistas);
         return "/profesionistas/listado";
     }
     
-    @GetMapping("/verPerfil/{cedula}")
+    @GetMapping("/verPerfil/{idProfesionista}")
     public String verPerfil(Profesionista profesionista, Model model) {
-        profesionista = profesionistaService.findByCedula(profesionista.getCedula());
+        profesionista = profesionistaService.getProfesionista(profesionista.getIdProfesionista());
+        var comentarios = comentarioService.findByIdProfesionista(profesionista.getIdProfesionista());
+        Cliente cliente;
+        
+        for(Comentario item:comentarios) {
+            cliente = clienteDao.findById(item.getCedula()).orElse(null);
+            item.setOpinion(cliente.getNombre() + " " + cliente.getApellidos() + "'<br>'" + item.getOpinion());
+        }
+            
+        model.addAttribute("profesionista", profesionista);
+        model.addAttribute("comentarios", comentarios);
+        return "/profesionistas/perfil";
+    }
+    
+    @GetMapping("/modificarPerfil/{cedula}")
+    public String modificarPerfil(Cliente cliente, Model model) {
+        cliente = clienteService.getCliente(cliente.getCedula());
+        Profesionista profesionista = profesionistaService.fingByCedula(cliente.getCedula());
         List<Categoria> listadoCategorias = categoriaService.getCategorias(true);
         model.addAttribute("profesionista", profesionista);
         model.addAttribute("categorias", listadoCategorias);
-        return "/profesionistas/perfil";
+        return "/profesionistas/modificar";
     }
    
     @PostMapping("/guardar")
     public String profesionistaGuardar(Profesionista profesionista) {        
         profesionistaService.save(profesionista);
         return "redirect:/profesionista/listado";
+    }
+    
+    @PostMapping("/buscarOcupacion")
+    public String consultaQuery3(@RequestParam(value = "filtroOcupacion") String ocupacion, Model model) {
+        /*var productos = productoService.filtroOcupacion(precioInf, precioSup);
+        model.addAttribute("productos", productos);
+        model.addAttribute("totalProductos", productos.size());
+        model.addAttribute("filtroOcupacion", ocupacion);*/
+        
+        /*Cliente cliente = clienteDao.findById(Long.parseLong("123")).orElse(null);
+        session.setAttribute("cliente", cliente);*/
+        var listadoProfesionistas = profesionistaService.filtroOcupacion(ocupacion);
+        model.addAttribute("profesionistas", listadoProfesionistas);
+        model.addAttribute("filtroOcupacion", ocupacion);
+        return "/profesionistas/listado";
+        
+        /*List<Profesionista> listadoProfesionistas = profesionistaService.getProfesionistas(true);
+        model.addAttribute("profesionistas", listadoProfesionistas);
+        return "/profesionistas/listado";*/
     }
 }

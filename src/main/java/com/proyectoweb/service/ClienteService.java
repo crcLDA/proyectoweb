@@ -6,7 +6,7 @@ import java.util.List;
 public interface ClienteService {
     public List<Cliente> getClientes(boolean activos);
     
-    public Cliente getCliente(Cliente cliente);
+    public Cliente getCliente(Long cedula);
     
     public void save(Cliente cliente);
     

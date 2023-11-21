@@ -23,7 +23,9 @@ public class Profesionista implements Serializable{
     @Column(name="id_profesionista")
     private Long idProfesionista;
     
-    private String cedula;
+    /*@Column(name="cedula")
+    private String cedula;*/
+    
     private String ocupacion;
     private String correo;
     private String telefono;
@@ -42,8 +44,7 @@ public class Profesionista implements Serializable{
 
     public Profesionista() {}
 
-    public Profesionista(String cedula, String ocupacion, String correo, String telefono, String instagram, String descripcion, boolean activo, Cliente cliente, Categoria categoria) {
-        this.cedula = cedula;
+    public Profesionista(String ocupacion, String correo, String telefono, String instagram, String descripcion, boolean activo, Cliente cliente, Categoria categoria) {
         this.ocupacion = ocupacion;
         this.correo = correo;
         this.telefono = telefono;

@@ -11,4 +11,6 @@ public interface ComentarioService {
     public void save(Comentario comentario);
     
     public void delete(Comentario comentario);
+    
+    public List<Comentario> findByIdProfesionista(Long idProfesionista);
 }

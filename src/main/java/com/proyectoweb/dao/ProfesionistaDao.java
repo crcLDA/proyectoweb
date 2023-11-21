@@ -12,5 +12,9 @@ public interface ProfesionistaDao extends JpaRepository <Profesionista, Long>{
             "WHERE (P.cedula=C.cedula)")
     public List<perfilProfesional> getPerfiles();*/ 
     
-    public Profesionista findByCedula(String cedula);
+    @Query(nativeQuery=true, value="SELECT * FROM profesionista where cedula=:cedula")
+    public Profesionista findByCedula(@Param("cedula") Long cedula);
+    
+    @Query(nativeQuery=true, value="SELECT * FROM empleatewp.profesionista where ocupacion LIKE %:filtroOcupacion%")
+    public List<Profesionista> filtroOcupacion(@Param("filtroOcupacion") String filtroOcupacion);
 }

@@ -1,11 +1,54 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/chtml" xmlns:th="http://thymeleaf.org">
-    <head th:replace="layout/plantilla :: head"/>
-
-    <header th:replace="layout/plantilla :: header"/>
-
-    <section th:replace="fragmentos :: paginaLogin"/>
-
-    <footer th:replace="layout/plantilla :: footer"/>
-
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://wwww.thymeleaf.org">
+    <head th:replace="~{layout/plantilla :: head}">
+        <title>TechShop</title>
+        <meta charset="UTF-8"/>
+    </head>
+    <body>
+        <header/>
+        
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-md-6">   
+                        <img src="images/inicio.png" id="imgIndex" alt="" class="img-fluid"/>
+                    </div>
+                    <div class="col-md-1"></div>
+                    <div class="col-md-4">
+                        <section id="main-header" class="py-1 bg-light bs-gradient text-black">
+                            <div class="container" style="border:1px solid #abd9d4;">
+                                <h4><i class="fa-solid fa-person-digging"></i> [[#{app.eslogan}]]</h4>
+                            </div>
+                        </section>
+                        <form method="POST" th:action="@{/login}">
+                            <div class="modal-body">
+                                
+                                <div class="mb-3">
+                                    <label for="username">[[#{login.username}]]</label>
+                                    <input class="form-control" type="text" name="username" id="username"/>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="password">[[#{login.password}]]</label>
+                                    <input class="form-control" type="password" name="password" id="password"/>
+                                </div>
+                            </div>
+                            <section id="section-footer" class="bg-light bs-gradient text-black">
+                                <div class="container">
+                                    <button class="btn btn-primary" type="submit">[[#{login.login}]]</button>
+                                </div>
+                            </section>
+                            <br><br>
+                            <div class="pr-auto container">
+                                <button class="btn btn-secondary" type="submit" >[[#{login.new}]]</button>
+                            </div>
+                        </form>     
+                    </div>
+                </div>
+            </div>
+            <div th:if="${param.error != null}">
+                [[#{error.login}]]
+            </div>
+        
+        <footer th:replace="~{layout/plantilla :: footer}"/>
+    </body>
 </html>
