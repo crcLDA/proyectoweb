@@ -83,7 +83,8 @@
                                         <tr th:each="comentario : ${comentarios}">
                                             <div>
                                                 <td>
-                                                    [[${comentario.opinion}]]
+                                                    <strong><p th:text="${#strings.substringBefore(comentario.opinion,':')}"></p></strong>
+                                                    <p th:text="${#strings.substringAfter(comentario.opinion,':')}">[[${comentario.opinion}]]</p>
                                                 </td>
                                             </div>
                                         </tr>
@@ -93,12 +94,57 @@
                             <div class="text-center p-2" th:if="${comentarios == null or comentarios.empty}">
                                 <span>[[#{lista.comentario}]]</span>
                             </div>
-                        </div>
+                        </div>  
                     </div>
                 </div>
             </div>
         </section>
         
+        <!-- 4 Fragmento que se utiliza en la página perfil.html -->
+        <section th:fragment="agregarComentario">
+            <div id="agregarComentario" class="modal fade"  tabindex="-1" 
+                 aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-md">
+                    <div class="modal-content">
+                        <div class="modal-header bg-info text-white">
+                            <h5 class="modal-title">[[#{categoria.agregar}]]</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div> 
+                        <form th:action="@{/comentario/guardar}" th:object="${comentario}"
+                              method="POST" class="was-validated" enctype="multipart/form-data">
+                            <input type="text" name="idProfesionista" th:field="*{idProfesionista}" value=[[${profesionista.idprofesionista}]]/>
+                            <input type="text" name="cedula" th:field="*{cedula}" value=${#ctx.session.cliente.cedula}/>
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <label for="opinion">[[#{categoria.descripcion}]]</label>
+                                    <input type="text" class="form-control" name="opinion" required="true"/>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-primary" type="submit">Guardar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 4 Fragmento que se utiliza en la página perfil.html -->
+        <section th:fragment="botonesAgregar" class="py-4 mb-4 bg-light">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-3">   
+                        <button 
+                            type="button" 
+                            class="btn btn-primary btn-block" 
+                            data-bs-toggle="modal" 
+                            data-bs-target="#agregarComentario">
+                            <i class="fas fa-plus"></i> [[#{comentario.agregar}]]
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
         
         <!-- 4 Fragmento que se utiliza en la página perfil.html -->
         <section th:fragment="verProfesionista">

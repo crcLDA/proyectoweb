@@ -1,17 +1,16 @@
 package com.proyectoweb.controller;
 
-import com.proyectoweb.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import com.proyectoweb.service.UsuarioDetailsService;
 
 
 @Controller
 public class IndexController {
     @Autowired
-    private UsuarioService usuarioService;
+    private UsuarioDetailsService usuarioService;
     
     @RequestMapping("/")
     public String page(Model model) {

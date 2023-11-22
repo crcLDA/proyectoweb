@@ -86,7 +86,8 @@ public class ProjectConfig implements WebMvcConfigurer{
                 .hasRole("USER")
                 )
                 .formLogin((form) -> form
-                .loginPage("/index").permitAll())
+                .defaultSuccessUrl("/profesionista/listado")
+                .loginPage("/login").permitAll())
                 .logout((logout) -> logout.permitAll());
         return http.build();
     }

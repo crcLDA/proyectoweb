@@ -1,9 +1,10 @@
 package com.proyectoweb.serviceImpl;
 
+import com.proyectoweb.dao.ClienteDao;
 import com.proyectoweb.dao.UsuarioDao;
+import com.proyectoweb.domain.Cliente;
 import com.proyectoweb.domain.Rol;
 import com.proyectoweb.domain.Usuario;
-import com.proyectoweb.service.UsuarioService;
 import jakarta.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,16 +17,20 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.proyectoweb.service.UsuarioDetailsService;
 
 @Service("UserDetailsService")
-public class UsuarioServiceImpl  implements UsuarioService, UserDetailsService{
+public class UsuarioDetailsServiceImpl  implements UsuarioDetailsService, UserDetailsService{
     @Autowired
     private UsuarioDao usuarioDao;
     
     @Autowired
+    private ClienteDao clienteDao;
+    
+    @Autowired
     private HttpSession session;
     
-    @Override
+    /*@Override
     @Transactional(readOnly=true)
     public List<Usuario> getUsuarios() {
         List<Usuario> usuarios = usuarioDao.findAll();
@@ -33,10 +38,10 @@ public class UsuarioServiceImpl  implements UsuarioService, UserDetailsService{
         return usuarios;
     }
 
-    /*@Override
+    @Override
     public Usuario getUsuario(Usuario usuario) {
         return usuarioDao.findById(usuario.getUsername()).orElse(null);
-    }*/
+    }
     
     @Override
     @Transactional
@@ -56,7 +61,7 @@ public class UsuarioServiceImpl  implements UsuarioService, UserDetailsService{
         if (us!=null){
             return us.getCedula();      
         }else return Long.parseLong("0");
-    }
+    }*/
     
     @Override
     @Transactional(readOnly=true)
@@ -71,7 +76,8 @@ public class UsuarioServiceImpl  implements UsuarioService, UserDetailsService{
         /*session.removeAttribute("usuarioImagen");
         session.setAttribute("usuarioImagen", usuario.getRutaImagen());*/
         //session.removeAttribute("cedula");
-        session.setAttribute("cedula", usuario.getCedula());
+        Cliente cliente = clienteDao.findById(usuario.getCedula()).orElse(null);
+        session.setAttribute("cliente", cliente);
         var roles = new ArrayList<GrantedAuthority>();
         
         //se transforma los roles a granted authority
