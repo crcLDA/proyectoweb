@@ -9,6 +9,7 @@ import com.proyectoweb.service.CategoriaService;
 import com.proyectoweb.service.ClienteService;
 import com.proyectoweb.service.ComentarioService;
 import com.proyectoweb.service.ProfesionistaService;
+import com.proyectoweb.service.UsuarioService;
 import jakarta.servlet.http.HttpSession;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +45,9 @@ public class ProfesionistaController {
     @Autowired
     private ComentarioService comentarioService;
     
+    @Autowired
+    private UsuarioService usuarioService;
+    
     @GetMapping("/listado")
     public String inicio(Model model) {
         List<Profesionista> listadoProfesionistas = profesionistaService.getProfesionistas(true);
@@ -52,7 +56,7 @@ public class ProfesionistaController {
     }
     
     @GetMapping("/verPerfil/{idProfesionista}")
-    public String verPerfil(Profesionista profesionista, Model model) {
+    public String verPerfil(Profesionista profesionista, Model model, HttpSession session) {
         profesionista = profesionistaService.getProfesionista(profesionista.getIdProfesionista());
         var comentarios = comentarioService.findByIdProfesionista(profesionista.getIdProfesionista());
         Cliente cliente;
@@ -61,28 +65,17 @@ public class ProfesionistaController {
             cliente = clienteDao.findById(item.getCedula()).orElse(null);
             item.setOpinion(cliente.getNombre() + " " + cliente.getApellidos() + ":" + item.getOpinion());
         }
+        
+        cliente = (Cliente) session.getAttribute("cliente");
         Comentario comentario = new Comentario(); 
+        comentario.setCedula(cliente.getCedula());
+        comentario.setIdProfesionista(profesionista.getIdProfesionista());
+        model.addAttribute("mostrarVista", usuarioService.esAdmin(cliente.getCedula()+""));
         model.addAttribute("profesionista", profesionista);
         model.addAttribute("comentarios", comentarios);
         model.addAttribute("comentario", comentario);
         return "/profesionistas/perfil";
     }
-    
-    /*@GetMapping("/modificarPerfil/{cedula}")
-    public String modificarPerfil(Cliente cliente, Model model) {
-        session = model.gets
-        cliente = clienteService.getCliente(cliente.getCedula());
-        Profesionista profesionista = profesionistaService.fingByCedula(cliente.getCedula());
-        List<Categoria> listadoCategorias = categoriaService.getCategorias(true);
-        model.addAttribute("profesionista", profesionista);
-        model.addAttribute("categorias", listadoCategorias);
-        
-        //validar contra session vs parametro
-        System.out.println(session.getAttribute("cliente.cedula")+"***************************************");
-        
-        
-        return "/profesionistas/modificar";
-    }*/
     
     @GetMapping("/modificarPerfil/{cedula}")
     public String modificarPerfil(@PathVariable String cedula, Model model, HttpSession session) {

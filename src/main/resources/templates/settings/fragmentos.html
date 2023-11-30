@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+    <head th:replace="~{layout/plantilla :: head}">
+        <title>Empleate</title>
+    </head>
+    <body>
+        <section th:fragment="botonesConfiguracion" id="botonesConfiguracion">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-3">
+                        <br><br>
+                        <img th:src="${#ctx.session.cliente.rutaImagen}" height="150"/> 
+                    </div>
+                    <div class="col-md-6">
+                        <br><br>
+                        <div class="card text-center text-black mb-3" style="background-color:lightcyan;">
+                            <div class="card-body">
+                                <a th:href="@{/configuracion/}"
+                                    class="btn" style="background-color:silver;">
+                                    <i class="fa-regular fa-user"></i> [[#{app.reportes}]]
+                                </a>
+                                <br><br>
+                                <a th:href="@{/configuracion/}"
+                                    class="btn" style="background-color:silver;">
+                                    <i class="fa-regular fa-user"></i> [[#{app.comentarios}]]
+                                </a>
+                                <br><br>    
+                                <a th:href="@{/configuracion/}"
+                                    class="btn" style="background-color:silver;">
+                                    <i class="fa-regular fa-user"></i> [[#{admin.cuentas}]]
+                                </a>
+                                <br><br>
+                                <a th:href="@{/configuracion/}"
+                                    class="btn" style="background-color:silver;">
+                                    <i class="fa-regular fa-user"></i> [[#{admin.categorias}]]
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </body>
+</html>

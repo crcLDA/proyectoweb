@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
     <head th:replace="~{layout/plantilla :: head}">
         <title>Empleate</title>
     </head>
@@ -18,22 +19,25 @@
                                 <br>
                                 <img th:src="${#ctx.session.cliente.rutaImagen}" height="150"/>
                                 <br><br>
-                                <h5>[[${#ctx.session.cliente.nombre}]] [[${#ctx.session.cliente.apellidos}]]</h5>
+                                <div class="container" sec:authorize="hasRole('ADMIN')">
+                                    <h5>[[${#ctx.session.cliente.nombre}]] [[${#ctx.session.cliente.apellidos}]]</h5>
+                                </div>
                                 <br><br>
                                 <a th:href="@{/cliente/modificarPerfil/}+${#ctx.session.cliente.cedula}"
                                     class="btn" style="background-color:silver;">
                                     <i class="fa-regular fa-user"></i> [[#{app.verPerfil}]]
                                 </a>
                                 <br><br>
-                                <a th:href="@{/profesionistas/modificar/}"
+                                <a th:href="@{/configuracion/}"
                                     class="btn" style="background-color:silver;">
                                     <i class="fa-regular fa-user"></i> [[#{app.config}]]
                                 </a>
                                 <br><br>    
-                                <a th:href="@{/profesionistas/modificar/}"
-                                    class="btn" style="background-color:silver;">
-                                    <i class="fa-regular fa-user"></i> [[#{app.cerrarSesion}]]
-                                </a>
+                                <form method="POST" th:action="@{/logout}">
+                                    <button class="btn mx-2" style="background-color:silver;">
+                                        <i class="fa fa-sign-out-alt"></i> [[#{app.cerrarSesion}]]
+                                    </button>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -81,11 +85,24 @@
                                     </thead>
                                     <tbody>
                                         <tr th:each="comentario : ${comentarios}">
+                                            
                                             <div>
                                                 <td>
                                                     <strong><p th:text="${#strings.substringBefore(comentario.opinion,':')}"></p></strong>
                                                     <p th:text="${#strings.substringAfter(comentario.opinion,':')}">[[${comentario.opinion}]]</p>
                                                 </td>
+                                                <div th:if="${mostrarVista}">
+                                                    <td><a th:href="@{/comentario/eliminar/}+${comentario.idComentario}"
+                                                         accesskey=""class="btn btn-danger">
+                                                            <i class="fas fa-trash"></i> [[#{accion.eliminar}]]</a></td>
+                                                </div>
+                                                <div th:unless="${mostrarVista}">
+                                                <div th:if="${#ctx.session.cliente.cedula == comentario.cedula}">
+                                                <td><a th:href="@{/comentario/eliminar/}+${comentario.idComentario}"
+                                                   class="btn btn-danger">
+                                                    <i class="fas fa-trash"></i> [[#{accion.eliminar}]]</a></td>
+                                                </div>
+                                                </div>
                                             </div>
                                         </tr>
                                     </tbody>
@@ -107,17 +124,48 @@
                 <div class="modal-dialog modal-md">
                     <div class="modal-content">
                         <div class="modal-header bg-info text-white">
-                            <h5 class="modal-title">[[#{categoria.agregar}]]</h5>
+                            <h5 class="modal-title">[[#{comentario.agregar}]]</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div> 
-                        <form th:action="@{/comentario/guardar}" th:object="${comentario}"
-                              method="POST" class="was-validated" enctype="multipart/form-data">
-                            <input type="text" name="idProfesionista" th:field="*{idProfesionista}" value=[[${profesionista.idprofesionista}]]/>
-                            <input type="text" name="cedula" th:field="*{cedula}" value=${#ctx.session.cliente.cedula}/>
+                        
+                        <form th:action="@{/comentario/guardar}" 
+                              th:object="${comentario}" method="POST" class="was-validated" enctype="multipart/form-data">
+                            <input type="hidden" name="idProfesionista" th:field="*{idProfesionista}"/>
+                            <input type="hidden" name="cedula" th:field="*{cedula}"/>
                             <div class="modal-body">
                                 <div class="mb-3">
-                                    <label for="opinion">[[#{categoria.descripcion}]]</label>
-                                    <input type="text" class="form-control" name="opinion" required="true"/>
+                                    <textarea class="form-control" name="opinion"
+                                              rows="10" cols="500" required="true"></textarea>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-primary" type="submit">Guardar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section th:fragment="modificarComentario">
+            <div id="modificarComentario" class="modal fade"  tabindex="-1" 
+                 aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-md">
+                    <div class="modal-content">
+                        <div class="modal-header bg-info text-white">
+                            <h5 class="modal-title">[[#{comentario.agregar}]]</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div> 
+                        
+                        <form th:action="@{/comentario/modificar}" 
+                              th:object="${comentario}" method="POST" class="was-validated" enctype="multipart/form-data">
+                            <input type="hidden" name="idComentario" th:field="*{idComentario}"/>
+                            <input type="hidden" name="idProfesionista" th:field="*{idProfesionista}"/>
+                            <input type="hidden" name="cedula" th:field="*{cedula}"/>
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <textarea class="form-control" name="opinion"
+                                              rows="10" cols="500" required="true"></textarea>
                                 </div>
                             </div>
                             <div class="modal-footer">
@@ -299,8 +347,8 @@
                                 </div>
                             </div>
                             <div class="card-footer text-center">
-                                <button type="submit" class="btn btn-warning">
-                                    <i class="fas fa-check"></i> [[#{pruebas.nativo}]]
+                                <button type="submit"  style="background-color:blue;" class="btn text-light">
+                                    <i class="fa-solid fa-magnifying-glass"></i> [[#{accion.buscar}]]
                                 </button>
                             </div>
                         </div>
