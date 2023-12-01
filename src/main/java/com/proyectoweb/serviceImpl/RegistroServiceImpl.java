@@ -139,7 +139,8 @@ public class RegistroServiceImpl implements RegistroService {
                 "registro.correo.activar", 
                 null, Locale.getDefault());
         mensaje = String.format(
-                mensaje, usuario.getUsername(), servidor, 
+                mensaje, usuario.getCedula(), 
+                usuario.getCorreo(), servidor, 
                 usuario.getUsername(), clave);
         String asunto = messageSource.getMessage(
                 "registro.mensaje.activacion", 
