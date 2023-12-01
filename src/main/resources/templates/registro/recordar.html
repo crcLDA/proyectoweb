@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+    <head th:replace="~{layout/plantilla2 :: head}">
+        <title>Empleate</title>        
+    </head>
+    <body>
+        <header th:replace="~{layout/plantilla2 :: header}"/>
+
+        <section th:replace="~{registro/fragmentos :: recordarUsuario}"/>
+
+        <footer th:replace="~{layout/plantilla2 :: footer}"/>
+    </body>
+</html>

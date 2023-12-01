@@ -25,6 +25,12 @@ public class Usuario  implements Serializable{
     @NotEmpty
     private Long cedula;
     
+    @NotEmpty
+    private String correo;
+    
+    @NotEmpty
+    private boolean activo;
+    
     @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "username")
     private List<Rol> roles;

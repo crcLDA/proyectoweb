@@ -98,9 +98,14 @@
                                                 </div>
                                                 <div th:unless="${mostrarVista}">
                                                 <div th:if="${#ctx.session.cliente.cedula == comentario.cedula}">
-                                                <td><a th:href="@{/comentario/eliminar/}+${comentario.idComentario}"
-                                                   class="btn btn-danger">
-                                                    <i class="fas fa-trash"></i> [[#{accion.eliminar}]]</a></td>
+                                                <td>
+                                                    <a th:href="@{/comentario/eliminar/}+${comentario.idComentario}"
+                                                      class="btn btn-danger">
+                                                        <i class="fas fa-trash"></i> [[#{accion.eliminar}]]</a>
+                                                    <!--<a th:href="@{/comentario/modificar/}+${comentario.idComentario}"
+                                                      class="btn btn-success" th:if="${mostrarVista}">
+                                                        <i class="fas fa-pencil"></i> [[#{accion.actualizar}]]</a>-->
+                                                </td>
                                                 </div>
                                                 </div>
                                             </div>
@@ -112,36 +117,6 @@
                                 <span>[[#{lista.comentario}]]</span>
                             </div>
                         </div>  
-                    </div>
-                </div>
-            </div>
-        </section>
-        
-        <!-- 4 Fragmento que se utiliza en la página perfil.html -->
-        <section th:fragment="agregarComentario">
-            <div id="agregarComentario" class="modal fade"  tabindex="-1" 
-                 aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-md">
-                    <div class="modal-content">
-                        <div class="modal-header bg-info text-white">
-                            <h5 class="modal-title">[[#{comentario.agregar}]]</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div> 
-                        
-                        <form th:action="@{/comentario/guardar}" 
-                              th:object="${comentario}" method="POST" class="was-validated" enctype="multipart/form-data">
-                            <input type="hidden" name="idProfesionista" th:field="*{idProfesionista}"/>
-                            <input type="hidden" name="cedula" th:field="*{cedula}"/>
-                            <div class="modal-body">
-                                <div class="mb-3">
-                                    <textarea class="form-control" name="opinion"
-                                              rows="10" cols="500" required="true"></textarea>
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button class="btn btn-primary" type="submit">Guardar</button>
-                            </div>
-                        </form>
                     </div>
                 </div>
             </div>

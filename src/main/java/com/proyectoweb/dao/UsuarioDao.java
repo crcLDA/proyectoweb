@@ -17,4 +17,10 @@ public interface UsuarioDao extends JpaRepository <Usuario, String>{
     @Query(nativeQuery=true,
             value="SELECT u.* FROM usuario u JOIN rol r ON u.username = r.username WHERE u.cedula = :cedula AND r.nombre = 'ADMIN';")
     public Usuario esAdmin(@Param("cedula") String cedula); 
+    
+    Usuario findByUsernameAndPassword(String username, String Password);
+
+    Usuario findByUsernameOrCorreo(String username, String correo);
+
+    boolean existsByUsernameOrCorreo(String username, String correo);
 }

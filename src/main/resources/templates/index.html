@@ -32,6 +32,8 @@
                                     <input class="form-control" type="password" name="password" id="password"/>
                                 </div>
                             </div>
+                            <a th:href="@{/registro/recordar}" style="color: blue; text-decoration: underline;">[[#{accion.recordar}]]</a>
+                            <div><br><br></div>
                             <section id="section-footer" class="bg-light bs-gradient text-black">
                                 <div class="container">
                                     <button class="btn btn-primary" type="submit">[[#{login.login}]]</button>
@@ -39,7 +41,7 @@
                             </section>
                             <br><br>
                             <div class="pr-auto container">
-                                <button class="btn btn-secondary" type="submit" >[[#{login.new}]]</button>
+                                <button class="btn btn-secondary" type="button" th:href="@{/registro/nuevo}">[[#{login.new}]]</button>
                             </div>
                         </form>     
                     </div>

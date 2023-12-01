@@ -7,6 +7,7 @@ import com.proyectoweb.service.ClienteService;
 import com.proyectoweb.serviceImpl.FirebaseStorageServiceImpl;
 import jakarta.servlet.http.HttpSession;
 import java.util.List;
+import java.util.Objects;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -39,26 +40,22 @@ public class ClienteController {
     @GetMapping("/modificarPerfil/{cedula}")
     public String modificarPerfil(@PathVariable String cedula, Model model, HttpSession session) {
         // Obtener el cliente de la sesión o cargarlo desde el servicio si no existe
-        Cliente cliente = (Cliente) session.getAttribute("cliente");
-        if (cliente == null) {
-            cliente = clienteService.getCliente(Long.parseLong(cedula));
-            session.setAttribute("cliente", cliente);
-        }
-
-
-        model.addAttribute("cliente", cliente);
-
-        if (Long.parseLong(cedula)==cliente.getCedula()){
+        Cliente clienteSession = (Cliente) session.getAttribute("cliente");
+        Cliente clienteParam = (Cliente) clienteService.getCliente(Long.parseLong(cedula));
+        if (Objects.equals(clienteParam.getCedula(), clienteSession.getCedula())) {
+            session.setAttribute("cliente", clienteParam);
+            model.addAttribute("cliente", clienteParam);
             return "/clientes/modificar";
-        } ///mostrar vista de listado
-        else{
+        } else {
             return "redirect:/profesionista/listado";
         }
     }
     
     @PostMapping("/guardar")
     public String clienteGuardar(Cliente cliente,
-            @RequestParam("imagenFile") MultipartFile imagenFile) {        
+            @RequestParam("imagenFile") MultipartFile imagenFile) {      
+        
+        System.out.println(cliente);
         if (!imagenFile.isEmpty()) {
             clienteService.save(cliente);
             cliente.setRutaImagen(

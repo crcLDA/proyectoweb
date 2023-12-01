@@ -17,27 +17,324 @@
                         <br><br>
                         <div class="card text-center text-black mb-3" style="background-color:lightcyan;">
                             <div class="card-body">
-                                <a th:href="@{/configuracion/}"
-                                    class="btn" style="background-color:silver;">
-                                    <i class="fa-regular fa-user"></i> [[#{app.reportes}]]
-                                </a>
-                                <br><br>
-                                <a th:href="@{/configuracion/}"
-                                    class="btn" style="background-color:silver;">
-                                    <i class="fa-regular fa-user"></i> [[#{app.comentarios}]]
-                                </a>
-                                <br><br>    
-                                <a th:href="@{/configuracion/}"
-                                    class="btn" style="background-color:silver;">
-                                    <i class="fa-regular fa-user"></i> [[#{admin.cuentas}]]
-                                </a>
-                                <br><br>
-                                <a th:href="@{/configuracion/}"
-                                    class="btn" style="background-color:silver;">
-                                    <i class="fa-regular fa-user"></i> [[#{admin.categorias}]]
-                                </a>
+                                <div th:if="${mostrarVista}">
+                                    <a th:href="@{/configuracion/listadoReportes}" class="btn" style="background-color:silver;">
+                                        <i class="fa-regular fa-user"></i> [[#{app.reportes}]]
+                                    </a>
+                                </div>
+                                <div th:unless="${mostrarVista}">
+                                    <button type="button" class="btn btn-block" style="background-color:silver;"
+                                        data-bs-toggle="modal" data-bs-target="#agregarReporte">
+                                        <i class="fas fa-plus"></i> [[#{reporte.agregar}]]
+                                    </button>
+                                </div>
+                                <div th:if="${mostrarVista}">
+                                    <br>   
+                                    <a th:href="@{/configuracion/listadoCuentas}"
+                                      class="btn" style="background-color:silver;">
+                                        <i class="fa-regular fa-user"></i> [[#{admin.cuentas}]]
+                                    </a>
+                                    <br><br>
+                                    <a th:href="@{/configuracion/listadoCategorias}"
+                                      class="btn" style="background-color:silver;">
+                                        <i class="fa-regular fa-user"></i> [[#{admin.categorias}]]
+                                    </a>
+                                </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section th:fragment="agregarReporte">
+            <div id="agregarReporte" 
+                 class="modal fade" 
+                 tabindex="-1" 
+                 aria-labelledby="exampleModalLabel" 
+                 aria-hidden="true">
+                <div class="modal-dialog modal-md">
+                    <div class="modal-content">
+                        <div class="modal-header bg-info text-white">
+                            <h5 class="modal-title">[[#{reporte.agregar}]]</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div> 
+                        <form th:action="@{/configuracion/guardarReporte}" th:object="${reporte}"
+                              method="POST" class="was-validated" enctype="multipart/form-data">
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <label for="descripcion">[[#{categoria.descripcion}]]</label>
+                                    <input type="text" class="form-control" name="descripcion" required="true"/>
+                                </div>
+                                <label>[[#{reporte.requisitos}]]</label>
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-primary" type="submit">[[#{accion.guardar}]]</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section th:fragment="listadoReportes" id="reportes">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-9">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4>[[#{reporte.listado}]]</h4>
+                            </div>
+                            <div th:if="${reportes != null and !reportes.empty}"> 
+                                <!--  con el $ consulta datos del model que viene del controlador-->
+                                <table class="table table-striped table-hover">
+                                    <thead class="table-dark">
+                                        <tr><th>#</th>
+                                            <th>[[#{reporte.descripcion}]]</th>
+                                            <!--  los nombres reporte.xxxx tiene que ser igual en Reporte ("CAPA DATOS")-->
+                                            <th></th></tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr th:each="reporte, contador : ${reportes}" th:if="${mostrarVista}">
+                                            <td>[[${contador.count}]]</td>
+                                            <td>[[${reporte.descripcion}]]</td>
+                                            <td><a th:href="@{/configuracion/eliminarReporte/}+${reporte.idReporte}"
+                                                   class="btn btn-danger" th:if="${mostrarVista}">
+                                                    <i class="fas fa-trash"></i> [[#{accion.eliminar}]]</a>
+                                            </td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="text-center p-2" th:if="${reportes == null or reportes.empty}">
+                                <span>[[#{lista.vacia}]]</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3" th:if="${mostrarVista}">
+                        <div class="card text-center bg-success text-white mb-3">
+                            <div class="card-body">
+                                <h3>[[#{reporte.total}]]</h3>
+                                <h4 class="fs-2"><i class="fa-regular fa-flag"></i> [[${totalReportes}]]</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        
+        <section th:fragment="listadoCuentas" id="cuentas">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-1"></div>
+                    <div class="col-md-10">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4>[[#{cuentas.listado}]]</h4>
+                            </div>
+                            <div th:if="${cuentas != null and !cuentas.empty}"> 
+                                <!--  con el $ consulta datos del model que viene del controlador-->
+                                <table class="table table-striped table-hover">
+                                    <thead class="table-dark">
+                                        <tr><th>[[#{usuario.username}]]</th>
+                                            <th>[[#{reporte.descripcion}]]</th>
+                                            <th></th></tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr th:each="cuenta : ${cuentas}" th:if="${mostrarVista}">
+                                            <td th:text="${cuenta[0]}"></td>
+                                            <td th:text="${cuenta[1]}"></td>
+                                            <td>
+                                                <div th:if="${cuenta[2]}">
+                                                    <a th:href="@{/configuracion/quitarAdmin/}+${cuenta[0]}"
+                                                      class="btn btn-danger">
+                                                    <i class="fas fa-trash"></i> [[#{admin.quitar}]]</a>
+                                                </div>
+                                                <div th:unless="${cuenta[2]}">
+                                                    <a th:href="@{/configuracion/ponerAdmin/}+${cuenta[0]}"
+                                                      class="btn btn-success">
+                                                    <i class="fa-solid fa-plus"></i>  [[#{admin.agregar}]]</a>
+                                                </div>
+                                            </td>
+                                            <td>
+                                            </td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="text-center p-2" th:if="${cuentas == null or cuentas.empty}">
+                                <span>[[#{lista.vacia}]]</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 1 Sección para crear el boton de agregar... llamará a una ventana modal-->
+        <section th:fragment="botonesAgregar" class="py-4 mb-4 bg-light">
+            <div class="container" th:if="${mostrarVista}">
+                <div class="row">
+                    <div class="col-md-3">   
+                        <button 
+                            type="button" 
+                            class="btn btn-primary btn-block" 
+                            data-bs-toggle="modal" 
+                            data-bs-target="#agregarCategoria">
+                            <i class="fas fa-plus"></i> [[#{categoria.agregar}]]
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2 Fragmento para agregar categoria, es la ventana modal -->
+        <section th:fragment="agregarCategoria">
+            <div id="agregarCategoria" 
+                 class="modal fade" 
+                 tabindex="-1" 
+                 aria-labelledby="exampleModalLabel" 
+                 aria-hidden="true">
+                <div class="modal-dialog modal-md">
+                    <div class="modal-content">
+                        <div class="modal-header bg-info text-white">
+                            <h5 class="modal-title">[[#{categoria.agregar}]]</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div> 
+                        <form th:action="@{/configuracion/guardarCategoria}" th:object="${categoria}"
+                              method="POST" class="was-validated" enctype="multipart/form-data">
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <label for="descripcion">[[#{categoria.descripcion}]]</label>
+                                    <input type="text" class="form-control" name="descripcion" required="true"/>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="activo">[[#{categoria.activo}]]</label>
+                                    <input class="form-check-input" type="checkbox" name="activo" id="activo"/>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-primary" type="submit">Guardar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3 Sección principal para mostrar la informaccion de la entidad categoria -->
+        <section th:fragment="listadoCategorias" id="categorias">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-9">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4>[[#{categoria.listado}]]</h4>
+                            </div>
+                            <div th:if="${categorias != null and !categorias.empty}"> 
+                                <!--  con el $ consulta datos del model que viene del controlador-->
+                                <table class="table table-striped table-hover">
+                                    <thead class="table-dark">
+                                        <tr><th>#</th>
+                                            <th>[[#{categoria.descripcion}]]</th>
+                                            <th>[[#{categoria.activo}]]</th>
+                                            <!--  los nombres categoria.xxxx tiene que ser igual en Categoria ("CAPA DATOS")-->
+                                            <th></th></tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr th:each="categoria, contador : ${categorias}">
+                                            <td>[[${contador.count}]]</td>
+                                            <td>[[${categoria.descripcion}]]</td>
+                                            <td th:text="${categoria.activo} ? 'Activa' : 'Inactiva'" />
+                                            <td><a th:href="@{/configuracion/eliminarCategoria/}+${categoria.idCategoria}"
+                                                   class="btn btn-danger" th:if="${mostrarVista}">
+                                                    <i class="fas fa-trash"></i> [[#{accion.eliminar}]]</a>
+                                                <a th:href="@{/configuracion/modificarCategoria/}+${categoria.idCategoria}"
+                                                   class="btn btn-success" th:if="${mostrarVista}">
+                                                    <i class="fas fa-pencil"></i> [[#{accion.actualizar}]]</a></td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="text-center p-2" th:if="${categorias == null or categorias.empty}">
+                                <span>[[#{lista.vacia}]]</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card text-center bg-success text-white mb-3">
+                            <div class="card-body">
+                                <h3>[[#{categoria.total}]]</h3>
+                                <h4 class="fs-2"><i class="fas fa-users"></i> [[${totalCategorias}]]</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4 Fragmento que se utiliza en la página modifca.html -->
+        <section th:fragment="editarCategoria">
+            <div class="row">
+                <div class="col-md-2"></div>
+                <div class="col-md-8">
+                    <form method="POST"
+                          th:action="@{/configuracion/guardarCategoria}" 
+                          th:object="${categoria}"
+                          class="was-validated"                          
+                          enctype="multipart/form-data">
+                        <input type="hidden" name="idCategoria" th:field="*{idCategoria}"/>
+                        <section th:replace="~{settings/fragmentos :: botonesEditar}"/>
+                        <div id=details>
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h4>[[#{accion.actualizar}]]</h4>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="mb-3">
+                                                    <label for="descripcion">[[#{categoria.descripcion}]]</label>
+                                                    <input type="text" class="form-control" 
+                                                           name="descripcion" th:field="*{descripcion}"
+                                                           required="true">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="activo">[[#{categoria.activo}]]</label>
+                                                    <input class="form-check-input" 
+                                                           type="checkbox" 
+                                                           name="activo" 
+                                                           id="activo"
+                                                           th:field="*{activo}">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5 Fragmento que se utiliza en el fragmento anterior -->
+        <section th:fragment="botonesEditar">
+            <div class="container py-4 mb-4 bg-light">
+                <div class="row">
+                    <div class="col-md-4 d-grid">
+                        <a th:href="@{/configuracion/listadoCategoria}" class="btn btn-primary">
+                            <i class="fas fa-arrow-left"></i> [[#{accion.regresar}]]
+                        </a>
+                    </div>
+                    <div class="col-md-4 d-grid">                                
+                        <a th:href="@{/configuracion/eliminarCategoria/}+${categoria.idCategoria}"
+                           class="btn btn-danger">
+                            <i class="fas fa-trash"></i> [[#{accion.eliminar}]]
+                        </a>
+                    </div>
+                    <div class="col-md-4 d-grid">
+                        <button type="submit" class="btn btn-success">
+                            <i class="fas fa-check"></i> [[#{accion.guardar}]]
+                        </button>
                     </div>
                 </div>
             </div>
