@@ -1,6 +1,10 @@
 package com.proyectoweb.controller;
 
+import com.proyectoweb.domain.Cliente;
+import com.proyectoweb.domain.Profesionista;
 import com.proyectoweb.domain.Usuario;
+import com.proyectoweb.service.ClienteService;
+import com.proyectoweb.service.ProfesionistaService;
 import com.proyectoweb.service.RegistroService;
 import jakarta.mail.MessagingException;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +23,12 @@ public class RegistroController {
 
     @Autowired
     private RegistroService registroService;
+    
+    @Autowired
+    private ClienteService clienteService;
+    
+    @Autowired
+    private ProfesionistaService profesionistaService;
 
     @GetMapping("/nuevo")
     public String nuevo(Model model, Usuario usuario) {
@@ -31,8 +41,15 @@ public class RegistroController {
     }
 
     @PostMapping("/crearUsuario")
-    public String crearUsuario(Model model, Usuario usuario) 
-            throws MessagingException {
+    public String crearUsuario(Model model, Usuario usuario) throws MessagingException {
+        Cliente cliente = new Cliente();
+        Profesionista profesionista = new Profesionista();
+        cliente.setCedula(usuario.getCedula());
+        clienteService.save(cliente);
+        
+        profesionista.setCliente(clienteService.getCliente(cliente.getCedula()));
+        profesionistaService.save(profesionista);
+        
         model = registroService.crearUsuario(model, usuario);
         return "/registro/salida";
     }

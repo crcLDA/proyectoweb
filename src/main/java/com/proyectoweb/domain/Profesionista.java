@@ -34,8 +34,9 @@ public class Profesionista implements Serializable{
     //private int idCategoria;
     private boolean activo;
     
+    //insetable, updatable
     @OneToOne
-    @JoinColumn(name="cedula", insertable=false, updatable=false)
+    @JoinColumn(name="cedula")
     private Cliente cliente;
     
     @ManyToOne
